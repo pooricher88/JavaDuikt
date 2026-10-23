@@ -11,6 +11,13 @@
 4. 10 найбільших витрат — `findTopExpenses`.
 5. Витрати за категоріями (на що витрачено найбільше) — `calculateExpensesByCategory`.
 
+## Самостійна робота
+- Модульні тести: читання даних із CSV (`TransactionCSVReaderTest`) і 10 найбільших витрат (`testFindTopExpenses`).
+- Найбільша й найменша витрати за період — `findLargestExpenseInPeriod`, `findSmallestExpenseInPeriod`
+  (період задається датами `dd-MM-yyyy`, включно).
+- Текстовий звіт із сумарними витратами по категоріях і по місяцях (`calculateExpensesByMonth`,
+  `printExpensesChart`): кожен символ `*` = 1000 грн.
+
 ## Структура
 - `Transaction` — модель (Lombok `@Data`, `@NoArgsConstructor`, `@AllArgsConstructor`).
 - `TransactionCSVReader`, `TransactionAnalyzer`, `TransactionReportGenerator` — **абстрактні класи
@@ -21,7 +28,7 @@
 
 ## Тести (JUnit 5)
 `TransactionAnalyzerTest`, `TransactionCSVReaderTest` — баланс, підрахунок за місяць, топ витрат,
-категорії, пропуск заголовка/некоректних рядків, підміна джерела даних.
+категорії, мін/макс витрати за період, витрати по місяцях, діаграма `*`, пропуск заголовка/некоректних рядків, підміна джерела даних.
 
 ## Запуск
 - IntelliJ IDEA: відкрити папку як Maven-проєкт → запустити `finance.Main`; тести — ПКМ по `src/test/java` → Run Tests.
