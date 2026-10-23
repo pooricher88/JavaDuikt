@@ -7,6 +7,8 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /**
@@ -68,5 +70,53 @@ public abstract class TransactionAnalyzer {
                 .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                         (a, b) -> a, LinkedHashMap::new));
+    }
+
+    /** Самостійна робота: витрати за вказаний період (дати включно, формат dd-MM-yyyy). */
+    public static List<Transaction> findExpensesInPeriod(List<Transaction> transactions, String from, String to) {
+        LocalDate start = LocalDate.parse(from, DATE_FORMATTER);
+        LocalDate end = LocalDate.parse(to, DATE_FORMATTER);
+        return transactions.stream()
+                .filter(t -> t.getAmount() < 0)
+                .filter(t -> {
+                    LocalDate date = parseDate(t.getDate());
+                    return date != null && !date.isBefore(start) && !date.isAfter(end);
+                })
+                .collect(Collectors.toList());
+    }
+
+    /** Самостійна робота: найбільша витрата за період (найбільша сума за модулем). */
+    public static Optional<Transaction> findLargestExpenseInPeriod(List<Transaction> transactions, String from, String to) {
+        return findExpensesInPeriod(transactions, from, to).stream()
+                .min(Comparator.comparingDouble(Transaction::getAmount));
+    }
+
+    /** Самостійна робота: найменша витрата за період (найменша сума за модулем). */
+    public static Optional<Transaction> findSmallestExpenseInPeriod(List<Transaction> transactions, String from, String to) {
+        return findExpensesInPeriod(transactions, from, to).stream()
+                .max(Comparator.comparingDouble(Transaction::getAmount));
+    }
+
+    /** Самостійна робота: сумарні витрати по місяцях ("MM-yyyy"), у хронологічному порядку. */
+    public static Map<String, Double> calculateExpensesByMonth(List<Transaction> transactions) {
+        Map<LocalDate, Double> byMonth = new TreeMap<>();
+        for (Transaction t : transactions) {
+            LocalDate date = parseDate(t.getDate());
+            if (t.getAmount() < 0 && date != null) {
+                byMonth.merge(date.withDayOfMonth(1), -t.getAmount(), Double::sum);
+            }
+        }
+        Map<String, Double> result = new LinkedHashMap<>();
+        byMonth.forEach((month, sum) -> result.put(month.format(MONTH_YEAR_FORMATTER), sum));
+        return result;
+    }
+
+    /** Розбір дати; null, якщо дата некоректна. */
+    private static LocalDate parseDate(String date) {
+        try {
+            return LocalDate.parse(date, DATE_FORMATTER);
+        } catch (DateTimeParseException | NullPointerException e) {
+            return null;
+        }
     }
 }

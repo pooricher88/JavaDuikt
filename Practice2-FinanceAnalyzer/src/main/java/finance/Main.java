@@ -43,5 +43,22 @@ public class Main {
         // Етап 5: на що витрачено найбільше
         TransactionReportGenerator.printExpensesByCategory(
                 TransactionAnalyzer.calculateExpensesByCategory(transactions));
+        System.out.println();
+
+        // Самостійна робота: найбільша та найменша витрати за період
+        String from = "01-01-2024";
+        String to = "31-01-2024";
+        TransactionReportGenerator.printMinMaxExpenses(from, to,
+                TransactionAnalyzer.findLargestExpenseInPeriod(transactions, from, to),
+                TransactionAnalyzer.findSmallestExpenseInPeriod(transactions, from, to));
+        System.out.println();
+
+        // Самостійна робота: текстові звіти-діаграми по категоріях і по місяцях
+        double unit = 1000;
+        TransactionReportGenerator.printExpensesChart("Витрати по категоріях",
+                TransactionAnalyzer.calculateExpensesByCategory(transactions), unit);
+        System.out.println();
+        TransactionReportGenerator.printExpensesChart("Витрати по місяцях",
+                TransactionAnalyzer.calculateExpensesByMonth(transactions), unit);
     }
 }
