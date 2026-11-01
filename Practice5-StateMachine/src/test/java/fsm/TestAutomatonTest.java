@@ -20,12 +20,12 @@ class TestAutomatonTest {
             "abcTES, 3",
             "abcTE, 2",
             "abcT, 1",
-            "abc, 0",
+            "abc, S",
             "TES, 3",
-            "TESx, 0",
-            "TEx, 0",
-            "Tx, 0",
-            "test, 0",
+            "TESx, S",
+            "TEx, S",
+            "Tx, S",
+            "test, S",
             "T E S T, 1",
             "TESTTEST, F",
             "TESTx, F"
@@ -36,7 +36,7 @@ class TestAutomatonTest {
 
     @Test
     void testEmptyString() {
-        assertEquals("0", automaton.run(""));
+        assertEquals("S", automaton.run(""));
     }
 
     @Test
